@@ -56,3 +56,7 @@ After further troubleshooting, I found that connecting VIN to 5V instead of 3V3 
 70: -- -- -- -- -- -- -- --
 ```
 The test script could then be successfully excecuted.
+
+### October 21st & 22nd
+After many failed attempts, I finally got Rust to work on the raspberry pi.
+Made an easy way to create new projects for raspberry pi in rust.
