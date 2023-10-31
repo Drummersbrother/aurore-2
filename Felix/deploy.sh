@@ -1,5 +1,7 @@
-scp -r init.sh felixhellborg@aurore2.local:~/init.sh
+ssh felixhellborg@aurore2.local mkdir -p mission
 
-scp -r scripts felixhellborg@aurore2.local:~/
+scp -r init.sh felixhellborg@aurore2.local:~/mission/
 
-ssh felixhellborg@aurore2.local /home/felixhellborg/init.sh
+scp -r scripts felixhellborg@aurore2.local:~/mission/
+
+ssh felixhellborg@aurore2.local 
