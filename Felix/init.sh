@@ -1,32 +1,20 @@
 #!/bin/bash -e
 VERBOSE=true
 
-
-cd mission
 MISSION_ROOT=~/mission
 
 
 # Ensure the existance of the "logs" directory
-if [ ! -d logs ]; then
-  if [ VERBOSE ]; then
-    echo "Could not find 'logs' directory... Creating"
-  fi
-
-  mkdir logs;
-fi
+mkdir -p $MISSION_ROOT/logs;
 
 # Ensure the existance of the "imu-reports" directory
-if [ ! -d imu-reports ]; then
-  if [ VERBOSE ]; then
-    echo "Could not find 'imu-reports' directory... Creating"
-  fi
+mkdir -p $MISSION_ROOT/imu-reports
 
-  mkdir imu-reports
-fi
+# Ensure the existance of the "camera-footage" directory
+mkdir -p $MISSION_ROOT/camera-footage
 
 
 # INIT LOG
-
 # Create new log file
 cd $MISSION_ROOT/logs
 EXISTING_FILES=$(ls -1q log* | wc -l)
@@ -48,7 +36,6 @@ fi
 
 # Logic for the log script
 echo "echo \"\$(date) [Log]: \$1\">> $MISSION_ROOT/logs/$LOG_FILE" >> $MISSION_ROOT/scripts/log.sh
-
 if [ VERBOSE ]; then
   echo "echo \"$1\"" >> $MISSION_ROOT/scripts/log.sh
 fi
@@ -58,19 +45,29 @@ log () {
   $MISSION_ROOT/scripts/log.sh "$1"
 }
 
-
 #INIT IMU
+try_init_imu() {
+  log "Attempting to initiate IMU"
 
-# Try to find the IMU Mpdule with I2C. It should be on address 4a
-if [ -n $(i2cdetect -y 1 | grep 4a) ]; then 
-  log "Could not detect any I2C devices at address 4a"
-else
-  log "Found IMU module at address 4a"
+  # Recursively call the init_imu script in case it crashes
+  $MISSION_ROOT/scripts/init_imu.sh $EXISTING_FILES && init_imu
+}
 
-  cd $MISSION_ROOT/imu-reports
-  IMU_REPORT_FILE="report$EXISTING_FILES"
-  touch $IMU_REPORT_FILE
+init_imu () {
+  try_init_imu
+  sleep 1
+}
 
-  log "Initiating python IMU script"
-  python3 $MISSION_ROOT/scripts/run-imu.py $MISSION_ROOT/imu-reports/$IMU_REPORT_FILE
-fi
+#INIT Camera
+try_init_camera () {
+  log "Attempting to initiate camera"
+
+  $MISSION_ROOT/scripts/init_camera.sh && init_camera
+}
+
+init_camera () {
+  try_init_camera
+  sleep 1
+}
+
+init_camera & init_imu
