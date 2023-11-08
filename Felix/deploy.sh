@@ -4,4 +4,6 @@ scp -r init.sh felixhellborg@aurore2.local:~/mission/
 
 scp -r scripts felixhellborg@aurore2.local:~/mission/
 
+scp -r media felixhellborg@aurore2.local:~/mission/
+
 ssh felixhellborg@aurore2.local 

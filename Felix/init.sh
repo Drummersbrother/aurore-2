@@ -70,4 +70,16 @@ init_camera () {
   sleep 1
 }
 
-init_camera & init_imu
+#INIT OLED
+try_init_oled () {
+  log "Attempting to initiate OLED screen"
+
+  $MISSION_ROOT/scripts/init_oled.sh && init_oled
+}
+
+init_oled () {
+  try_init_oled
+  sleep 1
+}
+
+init_camera & init_imu & init_oled

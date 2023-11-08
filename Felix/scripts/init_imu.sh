@@ -1,3 +1,5 @@
+#!/bin/bash -e
+
 MISSION_ROOT=~/mission
 
 log () {
