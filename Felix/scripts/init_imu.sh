@@ -1,6 +1,6 @@
 #!/bin/bash -e
-
-MISSION_ROOT=/home/felixhellborg/mission
+USER=`whoami`
+MISSION_ROOT=/home/$USER/mission
 
 log () {
   $MISSION_ROOT/scripts/log.sh "$1"

@@ -1,7 +1,7 @@
 #!/bin/bash -e
 VERBOSE=true
-
-MISSION_ROOT=/home/felixhellborg/mission
+USER=`whoami`
+MISSION_ROOT=/home/$USER/mission
 
 
 # Ensure the existance of the "logs" directory
