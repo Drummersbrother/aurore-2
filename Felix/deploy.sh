@@ -15,6 +15,6 @@ scp -r scripts $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
 
 scp -r media $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
 
-scp reboot-watchdog-init/* $MISSION_HOSTNAME@$MISSION_HOSTNAME:~/
+scp reboot-watchdog-init/* $MISSION_USERNAME@$MISSION_HOSTNAME:~/
 
 ssh $MISSION_USERNAME@$MISSION_HOSTNAME 
