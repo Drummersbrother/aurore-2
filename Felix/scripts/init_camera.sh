@@ -1,11 +1,10 @@
-MISSION_ROOT=~/mission
+MISSION_ROOT=/home/felixhellborg/mission
 
 log () {
   $MISSION_ROOT/scripts/log.sh "$1"
 }
 
-cd $MISSION_ROOT/camera-footage
-EXISTING_VIDEOS=$(ls -1q video* | wc -l)
+EXISTING_VIDEOS=$(ls -1q $MISSION_ROOT/camera-footage/video* | wc -l)
 OUTPUT_NAME="$MISSION_ROOT/camera-footage/video$EXISTING_VIDEOS.mp4"
 
 cd $MISSION_ROOT/scripts

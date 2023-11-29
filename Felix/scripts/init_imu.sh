@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-MISSION_ROOT=~/mission
+MISSION_ROOT=/home/felixhellborg/mission
 
 log () {
   $MISSION_ROOT/scripts/log.sh "$1"

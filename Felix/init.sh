@@ -1,7 +1,7 @@
 #!/bin/bash -e
 VERBOSE=true
 
-MISSION_ROOT=~/mission
+MISSION_ROOT=/home/felixhellborg/mission
 
 
 # Ensure the existance of the "logs" directory
@@ -16,8 +16,7 @@ mkdir -p $MISSION_ROOT/camera-footage
 
 # INIT LOG
 # Create new log file
-cd $MISSION_ROOT/logs
-EXISTING_FILES=$(ls -1q log* | wc -l)
+EXISTING_FILES=$(ls -1q $MISSION_ROOT/logs/log* | wc -l)
 LOG_FILE="log$EXISTING_FILES"
 touch $LOG_FILE
 
@@ -36,9 +35,6 @@ fi
 
 # Logic for the log script
 echo "echo \"\$(date) [Log]: \$1\">> $MISSION_ROOT/logs/$LOG_FILE" >> $MISSION_ROOT/scripts/log.sh
-if [ VERBOSE ]; then
-  echo "echo \"$1\"" >> $MISSION_ROOT/scripts/log.sh
-fi
 
 # Function to log message to the master log file for this session
 log () {
@@ -54,8 +50,8 @@ try_init_imu() {
 }
 
 init_imu () {
-  try_init_imu
   sleep 1
+  try_init_imu
 }
 
 #INIT Camera
@@ -66,8 +62,8 @@ try_init_camera () {
 }
 
 init_camera () {
-  try_init_camera
   sleep 1
+  try_init_camera
 }
 
 #INIT OLED
@@ -78,8 +74,8 @@ try_init_oled () {
 }
 
 init_oled () {
-  try_init_oled
   sleep 1
+  try_init_oled
 }
 
 init_camera & init_imu & init_oled

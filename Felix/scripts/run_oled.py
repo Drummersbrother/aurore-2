@@ -19,7 +19,7 @@ width = disp.width
 height = disp.height
 
 # Prepare text
-with open("../media/messages.txt") as f:
+with open("/home/felixhellborg/mission/media/messages.txt") as f:
     lines = f.readlines()
 
 length = len(lines)
