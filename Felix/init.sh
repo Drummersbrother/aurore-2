@@ -18,7 +18,7 @@ mkdir -p $MISSION_ROOT/camera-footage
 # Create new log file
 EXISTING_FILES=$(ls -1q $MISSION_ROOT/logs/log* | wc -l)
 LOG_FILE="log$EXISTING_FILES"
-touch $LOG_FILE
+touch $MISSION_ROOT/logs/$LOG_FILE
 
 # Create callable log executable to be used outside of this file
 if [ ! -f $MISSION_ROOT/scripts/log.sh ]; then
@@ -78,4 +78,17 @@ init_oled () {
   try_init_oled
 }
 
-init_camera & init_imu & init_oled
+log "Waiting for launch..."
+
+# Wait for input pin to be high and then initiate scripts. If the launch detection scripts returns non-zero exitcode, the device is rebooted
+$MISSION_ROOT/scripts/register-launch
+launchExitCode=$?
+echo "launch code is $launchExitCode"
+if [ $launchExitCode -eq 0 ]; then
+  log "Found launch state to be active"
+  log "Initiating scripts"
+  init_camera & init_imu & init_oled
+else 
+  log "rebooting"
+  sudo reboot
+fi
