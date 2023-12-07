@@ -5,14 +5,16 @@ import time
 import sys
 import os
 
+USER=sys.argv[1]
+
 def log(message: str):
-    os.system("~/mission/scripts/log.sh \"%s\"" % message)
+    os.system("/home/%s/mission/scripts/log.sh \"%s\"" % (USER, message))
 
 picam2 = Picamera2()
 picam2.configure(picam2.create_video_configuration())
 
 encoder = H264Encoder(bitrate=int(2e7))
-output_name = sys.argv[1]
+output_name = sys.argv[2]
 output = FfmpegOutput(output_name)
 
 log("Starting recording")

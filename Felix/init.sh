@@ -1,6 +1,7 @@
 #!/bin/bash -e
 VERBOSE=true
-USER=`whoami`
+# User must be explicitly specified, because systemctl service is run with USER=root
+USER=$1
 MISSION_ROOT=/home/$USER/mission
 
 
@@ -46,7 +47,7 @@ try_init_imu() {
   log "Attempting to initiate IMU"
 
   # Recursively call the init_imu script in case it crashes
-  $MISSION_ROOT/scripts/init_imu.sh $EXISTING_FILES && init_imu
+  $MISSION_ROOT/scripts/init_imu.sh $USER $EXISTING_FILES && init_imu
 }
 
 init_imu () {
@@ -58,7 +59,7 @@ init_imu () {
 try_init_camera () {
   log "Attempting to initiate camera"
 
-  $MISSION_ROOT/scripts/init_camera.sh && init_camera
+  $MISSION_ROOT/scripts/init_camera.sh $USER && init_camera
 }
 
 init_camera () {
@@ -70,7 +71,7 @@ init_camera () {
 try_init_oled () {
   log "Attempting to initiate OLED screen"
 
-  $MISSION_ROOT/scripts/init_oled.sh && init_oled
+  $MISSION_ROOT/scripts/init_oled.sh $USER && init_oled
 }
 
 init_oled () {
@@ -78,17 +79,4 @@ init_oled () {
   try_init_oled
 }
 
-log "Waiting for launch..."
-
-# Wait for input pin to be high and then initiate scripts. If the launch detection scripts returns non-zero exitcode, the device is rebooted
-$MISSION_ROOT/scripts/register-launch
-launchExitCode=$?
-echo "launch code is $launchExitCode"
-if [ $launchExitCode -eq 0 ]; then
-  log "Found launch state to be active"
-  log "Initiating scripts"
-  init_camera & init_imu & init_oled
-else 
-  log "rebooting"
-  sudo reboot
-fi
+init_camera & init_imu & init_oled

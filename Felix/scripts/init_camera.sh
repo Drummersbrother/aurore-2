@@ -1,5 +1,5 @@
 #!/bin/bash -e
-USER=`whoami`
+USER=$1
 MISSION_ROOT=/home/$USER/mission
 
 log () {
@@ -10,7 +10,7 @@ EXISTING_VIDEOS=$(ls -1q $MISSION_ROOT/camera-footage/video* | wc -l)
 OUTPUT_NAME="$MISSION_ROOT/camera-footage/video$EXISTING_VIDEOS.mp4"
 
 cd $MISSION_ROOT/scripts
-python3 $MISSION_ROOT/scripts/run_camera.py $OUTPUT_NAME
+python3 $MISSION_ROOT/scripts/run_camera.py $USER $OUTPUT_NAME
 if [ $? != 0 ]; then
   log "Camera Python script crashed"
 fi
