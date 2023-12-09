@@ -1,5 +1,5 @@
 #!/bin/bash -e
-USER=`whoami`
+USER=$1
 MISSION_ROOT=/home/$USER/mission
 
 log () {
@@ -14,11 +14,12 @@ else
   log "Found IMU module at address 4a"
 
   cd $MISSION_ROOT/imu-reports 
-  IMU_REPORT_FILE="report$1"
+  IMU_REPORT_FILE="report$2"
   touch $IMU_REPORT_FILE
+  log "created file $IMU_REPORT_FILE"
 
   log "Initiating python IMU script"
-  python3 $MISSION_ROOT/scripts/run_imu.py $MISSION_ROOT/imu-reports/$IMU_REPORT_FILE
+  python3 $MISSION_ROOT/scripts/run_imu.py $USER $MISSION_ROOT/imu-reports/$IMU_REPORT_FILE
   # Check exit code and exit
   if [ $? != 0 ]; then
     log "IMU Python script crashed"

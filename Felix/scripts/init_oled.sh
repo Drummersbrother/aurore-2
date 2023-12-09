@@ -1,5 +1,5 @@
 #!/bin/bash -e
-USER=`whoami`
+USER=$1
 MISSION_ROOT=/home/$USER/mission
 
 log () {
@@ -12,7 +12,7 @@ if [ -n $(i2cdetect -y 1 | grep 3c) ]; then
 else
   log "Found OLED module at address 3c"
 
-  python3 $MISSION_ROOT/scripts/run_oled.py
+  python3 $MISSION_ROOT/scripts/run_oled.py $USER
   
   if [ $? != 0 ]; then
     log "OLED Python script crashed"

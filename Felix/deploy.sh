@@ -1,7 +1,7 @@
 #!/bin/bash -e
 set -euxo pipefail
-MISSION_USERNAME=hugo
-MISSION_HOSTNAME=rpiz2
+MISSION_USERNAME=felixhellborg
+MISSION_HOSTNAME=aurore2.local
 ssh $MISSION_USERNAME@$MISSION_HOSTNAME mkdir -p mission
 
 scp -r init.sh $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/

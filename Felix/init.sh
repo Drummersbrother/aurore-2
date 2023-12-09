@@ -1,6 +1,7 @@
 #!/bin/bash -e
 VERBOSE=true
-USER=`whoami`
+# User must be explicitly specified, because systemctl service is run with USER=root
+USER=$1
 MISSION_ROOT=/home/$USER/mission
 
 
@@ -18,7 +19,7 @@ mkdir -p $MISSION_ROOT/camera-footage
 # Create new log file
 EXISTING_FILES=$(ls -1q $MISSION_ROOT/logs/log* | wc -l)
 LOG_FILE="log$EXISTING_FILES"
-touch $LOG_FILE
+touch $MISSION_ROOT/logs/$LOG_FILE
 
 # Create callable log executable to be used outside of this file
 if [ ! -f $MISSION_ROOT/scripts/log.sh ]; then
@@ -46,7 +47,7 @@ try_init_imu() {
   log "Attempting to initiate IMU"
 
   # Recursively call the init_imu script in case it crashes
-  $MISSION_ROOT/scripts/init_imu.sh $EXISTING_FILES && init_imu
+  $MISSION_ROOT/scripts/init_imu.sh $USER $EXISTING_FILES && init_imu
 }
 
 init_imu () {
@@ -58,7 +59,7 @@ init_imu () {
 try_init_camera () {
   log "Attempting to initiate camera"
 
-  $MISSION_ROOT/scripts/init_camera.sh && init_camera
+  $MISSION_ROOT/scripts/init_camera.sh $USER && init_camera
 }
 
 init_camera () {
@@ -70,7 +71,7 @@ init_camera () {
 try_init_oled () {
   log "Attempting to initiate OLED screen"
 
-  $MISSION_ROOT/scripts/init_oled.sh && init_oled
+  $MISSION_ROOT/scripts/init_oled.sh $USER && init_oled
 }
 
 init_oled () {
