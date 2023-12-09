@@ -1,4 +1,6 @@
 *.mp4
+*.mov
+.vscode
 **/.DS_STORE
 .DS_STORE
 **/__pycache__

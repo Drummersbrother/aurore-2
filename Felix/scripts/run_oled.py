@@ -10,13 +10,14 @@ from adafruit_blinka.agnostic import sys
 
 import numpy as np
 import sys
+import os
 
 N_LINES_PER_SCREEN = 6
 LINE_HEIGHT=11
 
 def loadmessages():
     # Prepare text
-    with open("/home/hugo/mission/media/messages.txt") as f:
+    with open(os.path.expanduser("~/mission/media/messages.txt")) as f:
         lines = f.readlines()
     lines = [x for x in lines if x.replace("\n", "").strip() != ""]
     groups = []
@@ -27,41 +28,19 @@ def loadmessages():
 # Prepare text
 with open(os.path.expanduser("~/mission/media/messages.txt")) as f:
     lines = f.readlines()
-def get_gol_gen(matrix):
-    height = 128
-    width=64
-    countarr = np.zeros_like(matrix)
-    countarr[1:] +=    matrix[:-1]  # North
-    countarr[:-1] +=   matrix[1:]  # South
-    countarr[:,1:] +=  matrix[:,:-1]  # West
-    countarr[:,:-1] += matrix[:,1:]  # East
-
-    countarr[1:,1:] += matrix[:-1,:-1]  # NW
-    countarr[1:,1:] += matrix[:-1,:-1]  # NE
-    matrix &= (countarr == 2)
-    matrix |= (countarr == 3)
-    return matrix
 
 def drawmessages(disp, data, period=.1):
     width = disp.width
     height = disp.height
 
-    if sys.argv[1] == "gol":
+    if sys.argv[1] == "vids":
         board = np.zeros((width, height), dtype=np.uint8)
-        refx, refy = width//2, height//2
-        init_pattern = np.array([[1, 1, 1, 0, 1], [1, 0, 0, 0, 0], [0, 0, 0, 1, 1], [0, 1, 1, 0, 1], [1, 0, 1, 0, 1]])
-        for i in range(init_pattern.shape[0]):
-            for j in range(init_pattern.shape[1]):
-                board[refx+i, refy+j] = init_pattern[i, j]
-        board[10:20, 00:60] = 1
 
-        for step in range(1103):
-            image = Image.fromarray(np.uint8((board.transpose()>0)*255), mode="L").convert("1")
+        for img in video_data:
+            image = Image.fromarray(np.uint8((img.transpose()>0)*255), mode="L").convert("1")
             disp.image(image)
             disp.display()
-            print(step)
 
-            board = get_gol_gen(board)
             time.sleep(period)
     else:
         font = ImageFont.load_default()
