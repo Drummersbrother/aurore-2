@@ -1,1 +1,6 @@
 *.mp4
+**/.DS_STORE
+.DS_STORE
+**/__pycache__
+Hugo/source_videos/*
+Hugo/preview_videos/*

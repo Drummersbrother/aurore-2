@@ -20,8 +20,7 @@ width = disp.width
 height = disp.height
 
 # Prepare text
-USER = sys.argv[1]
-with open("/home/%s/mission/media/messages.txt" % USER) as f:
+with open(os.path.expanduser("~/mission/media/messages.txt")) as f:
     lines = f.readlines()
 
 length = len(lines)
