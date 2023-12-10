@@ -2,19 +2,24 @@
 set -euxo pipefail
 MISSION_USERNAME=felixhellborg
 MISSION_HOSTNAME=aurore2.local
+TRANSFER_CMD="rsync --progress"
 ssh $MISSION_USERNAME@$MISSION_HOSTNAME mkdir -p mission
 
-scp -r init.sh $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
+$TRANSFER_CMD -r init.sh $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
 
-scp -r scripts $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
+$TRANSFER_CMD -r scripts $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
 
-(cd detect-system-failure || exit 1;
-  cross build --release --target aarch64-unknown-linux-gnu
-  scp -r ./target/aarch64-unknown-linux-gnu/release/detect-system-failure $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/scripts/detect_system_failure  
-)
+if [ "$1" != "--no-build" ]; then
+  (cd detect-system-failure || exit 1;
+    cross build --release --target aarch64-unknown-linux-gnu
+    $TRANSFER_CMD -r ./target/aarch64-unknown-linux-gnu/release/detect-system-failure $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/scripts/detect_system_failure  
+  )
+fi
 
-scp -r media $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
+$TRANSFER_CMD -r media $MISSION_USERNAME@$MISSION_HOSTNAME:~/mission/
 
-scp reboot-watchdog-init/* $MISSION_USERNAME@$MISSION_HOSTNAME:~/
+$TRANSFER_CMD reboot-watchdog-init/* $MISSION_USERNAME@$MISSION_HOSTNAME:~/
 
-ssh $MISSION_USERNAME@$MISSION_HOSTNAME 
+if [ "$2" != "--no-ssh" ]; then
+  ssh $MISSION_USERNAME@$MISSION_HOSTNAME
+fi

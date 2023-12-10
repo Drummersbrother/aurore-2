@@ -9,10 +9,11 @@ import busio
 from adafruit_bno08x.i2c import BNO08X_I2C
 from adafruit_bno08x import BNO_REPORT_ACCELEROMETER
 
-USER=sys.argv[1]
+USER = os.environ["USER"]
+
 
 def log(message: str):
-    os.system("/home/%s/mission/scripts/log.sh \"%s\"" % (USER, message))
+    os.system('/home/%s/mission/scripts/log.sh "%s"' % (USER, message))
 
 
 def report(data: str):
@@ -28,10 +29,9 @@ log("Initiating IMU acceleration reports")
 while True:
     sleep(0.5)
     try:
-        report_file = open(sys.argv[2], 'a')
-        accel_x, accel_y, accel_z = bno.acceleration  # pylint:disable=no-member
-        report("X: %0.6f  Y: %0.6f Z: %0.6f  m/s^2" % (accel_x, accel_y, accel_z))
-        report_file.close()
+        with open(sys.argv[2], "a") as report_file:
+            accel_x, accel_y, accel_z = bno.acceleration  # pylint:disable=no-member
+            report("X: %0.6f  Y: %0.6f Z: %0.6f  m/s^2" % (accel_x, accel_y, accel_z))
         log("successfully reported IMU readings")
     except:
         log("Failed to log IMU report")

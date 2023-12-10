@@ -8,9 +8,7 @@ log () {
 
 
 # Try to find the IMU Mpdule with I2C. It should be on address 4a
-if [ -n $(i2cdetect -y 1 | grep 4a) ]; then
-  log "Could not detect any I2C devices at address 4a"
-else 
+if [[ $(i2cdetect -y 1 | grep -o "4a") == "4a" ]]; then
   log "Found IMU module at address 4a"
 
   cd $MISSION_ROOT/imu-reports 
@@ -24,4 +22,6 @@ else
   if [ $? != 0 ]; then
     log "IMU Python script crashed"
   fi
+else 
+  log "Could not detect any I2C devices at address 4a"
 fi
