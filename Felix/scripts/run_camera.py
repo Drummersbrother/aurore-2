@@ -5,13 +5,15 @@ import time
 import sys
 import os
 
-USER=sys.argv[1]
+USER = sys.argv[1]
+
 
 def log(message: str):
-    os.system("/home/%s/mission/scripts/log.sh \"%s\"" % (USER, message))
+    os.system('/home/%s/mission/scripts/log.sh "%s"' % (USER, message))
+
 
 picam2 = Picamera2()
-picam2.configure(picam2.create_video_configuration())
+picam2.configure(picam2.create_video_configuration(raw=picam2.sensor_modes[1], main=dict(size=(1296, 972))))
 
 encoder = H264Encoder(bitrate=int(2e7))
 output_name = sys.argv[2]

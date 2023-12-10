@@ -45,7 +45,6 @@ def drawmessages(disp, data, period=0.1):
             draw.text((0, i * LINE_HEIGHT), l, font=font, fill=255)
         disp.image(image)
         disp.display()
-        print(msg)
         time.sleep(period)
 
 
