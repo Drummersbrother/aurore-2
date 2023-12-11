@@ -83,7 +83,7 @@ def start():
     disp.display()
     while True:
         drawmessages(disp, data)
-        drawvideos(disp, video_filenames, period=(1 / 20), skip_per_n=2)
+        drawvideos(disp, video_filenames, period=(1 / 20), skip_per_n=10)
 
 
 if __name__ == "__main__":

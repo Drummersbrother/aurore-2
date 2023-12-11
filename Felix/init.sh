@@ -79,8 +79,8 @@ init_oled () {
   try_init_oled
 }
 
-# Wait 10 minutes or wait for the register-launch script to succeed
-sleep 600 || $MISSION_ROOT/scripts/register-launch
+# We got a deal that no delay is needed
+sleep 0 || $MISSION_ROOT/scripts/register-launch
 if [ $? -eq 0 ]; then
   log "Initializing scripts"
 else
